@@ -15,7 +15,7 @@ def main(msg: func.ServiceBusMessage):
     try:
         cur = conn.cursor()
         cur.execute("SELECT message,subject FROM notification WHERE id=%s;", (notification_id,))
-        messagePlain, subject = cur.fetchone()
+        message_plain, subject = cur.fetchone()
         cur.execute("SELECT email,first_name FROM attendee;")
         attendees = cur.fetchall()
         for attendee in attendees:
@@ -23,7 +23,7 @@ def main(msg: func.ServiceBusMessage):
                 from_email='from_email@example.com',
                 to_emails=attendee[0],
                 subject='{}: {}'.format(attendee[1], subject),
-                html_content=messagePlain)
+                html_content=message_plain)
             try:
                 sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
                 response = sg.send(message)
