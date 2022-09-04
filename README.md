@@ -72,4 +72,18 @@ Complete a month cost analysis of each Azure resource to give an estimate total 
 
 ## Architecture Explanation
 
+The current architecture:
+
+The web application is not scalable to handle user load at peak
+
+When the admin sends out notifications, it's currently taking a long time because it's looping through all attendees, resulting in some HTTP timeout exceptions
+
+The current architecture is not cost-effective
+
+After migration:
+
+Through the migration to a microservice architecture and refactoring the notification logic to an Azure Function via a service bus queue message, the different components of the web application are decoupled. This makes it more scalable and sending out of notifications does not lead to HTTP timeout exceptions anymore.
+
+The migration to an Azure App Service and Azure Postgres database instance improves cost-efficiency.
+
 Because this app have sending email which is good to place into background process, we need to split the sending email and the web app itself. The web app only do listing and sending queue, the Free Tier is enough for doing this since the web trafic not really high. The cost will move to background process, it will depend how much we sending the email, how much the attendee, if the attendee quite many, that will affect to execution time which is increase the monthly cost. But, the Azure Function App is quite cheap and we not suffer the web app to have more high resource.
