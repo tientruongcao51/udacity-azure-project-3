@@ -6,6 +6,7 @@ from azure.servicebus import ServiceBusMessage
 import logging
 import sys
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -42,6 +43,7 @@ def registration():
         else:
             return render_template('registration.html')
 
+
 @app.route('/Attendees')
 def attendees():
     attendees = Attendee.query.order_by(Attendee.submitted_date).all()
@@ -52,6 +54,7 @@ def attendees():
 def notifications():
     notifications = Notification.query.order_by(Notification.id).all()
     return render_template('notifications.html', notifications=notifications)
+
 
 @app.route('/Notification', methods=['POST', 'GET'])
 def notification():
@@ -70,7 +73,7 @@ def notification():
             queue_client.send_messages(message)
 
             return redirect('/Notifications')
-        except :
+        except:
             logging.error('log unable to save notification')
             logging.error("Unexpected error:", sys.exc_info()[0])
             raise
