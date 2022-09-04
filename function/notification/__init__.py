@@ -11,8 +11,8 @@ def main(msg: func.ServiceBusMessage):
     notification_id = int(msg.get_body().decode('utf-8'))
     logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)
 
-    conn = conn = psycopg2.connect(host=os.environ.get('DB_HOST'), database=os.environ.get('DB_DATABASE'),
-                                   user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'))
+    conn = psycopg2.connect(host=os.environ.get('DB_HOST'), database=os.environ.get('DB_DATABASE'),
+                            user=os.environ.get('DB_USER'), password=os.environ.get('DB_PASSWORD'))
     try:
         cur = conn.cursor()
         cur.execute("SELECT message,subject FROM notification WHERE id=%s;", (notification_id,))
